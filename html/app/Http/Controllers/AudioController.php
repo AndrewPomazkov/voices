@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Helpers\AudioUploaderHelper;
+use App\Models\Audio;
+use App\Rules\AudioRecording;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+class AudioController extends Controller
+{
+    public function store(Request $request)
+    {
+
+        $request->validate([
+            'audio_data' => [
+                'required',
+                new  AudioRecording(),
+            ]
+        ]);
+        $audio = $request->file('audio_data');
+        $extension = AudioUploaderHelper::getExtensionByMimeType($audio);
+
+        $filename = time() . '.' . $extension;
+        $path = $audio->storeAs('public/audio', $filename);
+
+        $user = auth()->user();
+        $audioMessage = new Audio([
+            'filename' => $filename,
+            'path' => $path,
+            'user_id' => $user->id,
+        ]);
+        $audioMessage->save();
+
+        return redirect()->route('dashboard_index');
+    }
+
+    public function listen(Request $request, $id)
+    {
+        $audio = Audio::find($id);
+
+        if (!$audio) {
+            return response()->json([
+                'message' => 'Audio not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'url' => url('audio/' . $audio->filename)
+        ], 200);
+    }
+
+    public function showUploadForm()
+    {
+        return view('audio.upload');
+    }
+}
