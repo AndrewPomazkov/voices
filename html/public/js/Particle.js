@@ -62,12 +62,7 @@ export class Particle {
     }
 
     draw(context, particleImage) {
-        context.drawImage(
-            particleImage,
-            this.x - this.radius,
-            this.y - this.radius,
-            this.radius * 2,
-            this.radius * 2
-        );
+        context.fillStyle = 'black';
+        context.fillRect(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
     }
 }

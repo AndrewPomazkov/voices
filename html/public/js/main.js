@@ -4,6 +4,14 @@ import { ParticleSystem } from './ParticleSystem.js';
 const particleImage = new Image();
 particleImage.src = '/images/avatar-svgrepo-com.png';
 
+particleImage.onerror = function() {
+    console.error('Error loading the particle image');
+};
+
+particleImage.onabort = function() {
+    console.error('Loading of the particle image was aborted');
+};
+
 // Получение элемента холста и установка размеров
 const canvas = document.getElementById('particleCanvas');
 canvas.width = window.innerWidth;

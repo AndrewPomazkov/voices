@@ -4,6 +4,10 @@ export class ParticleSystem {
     constructor(canvasElement, particleImage, particleCount = 100) {
         this.canvas = canvasElement;
         this.ctx = this.canvas.getContext('2d');
+        if (!this.ctx) {
+            console.error('Error getting canvas 2D context');
+            return;
+        }
         this.particleImage = particleImage;
         this.particleCount = particleCount;
         this.particles = [];
