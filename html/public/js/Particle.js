@@ -10,6 +10,10 @@ export class Particle {
         this.vy = Math.random() * 4 - 2;
         this.size = Math.random() * 20 + 10;
         this.connections = [];
+        this.radius = 15;
+        this.speedX = Math.random() * 4 - 2;
+        this.speedY = Math.random() * 4 - 2;
+
     }
 
     update() {
@@ -62,7 +66,12 @@ export class Particle {
     }
 
     draw(context, particleImage) {
-        context.fillStyle = 'black';
-        context.fillRect(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
+        context.drawImage(
+            particleImage,
+            this.x - this.radius,
+            this.y - this.radius,
+            this.radius * 2,
+            this.radius * 2
+        );
     }
 }
