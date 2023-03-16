@@ -32,16 +32,23 @@ export class ParticleSystem {
     }
 
     createConnections() {
-        for (let i = 0; i < this.particles.length; i++) {
-            let particle = this.particles[i];
-            let connectionsCount = 0;
+        const maxDistance = 150;
+        const ctx = this.ctx;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
 
+        for (let i = 0; i < this.particles.length; i++) {
             for (let j = i + 1; j < this.particles.length; j++) {
-                if (connectionsCount < this.maxConnectionsPerParticle) {
-                    this.connections.push({ source: particle, target: this.particles[j] });
-                    connectionsCount++;
-                } else {
-                    break;
+                const particle1 = this.particles[i];
+                const particle2 = this.particles[j];
+                const distance = particle1.distanceTo(particle2);
+
+                if (distance <= maxDistance) {
+                    ctx.beginPath();
+                    ctx.moveTo(particle1.x, particle1.y);
+                    ctx.lineTo(particle2.x, particle2.y);
+                    ctx.closePath();
+                    ctx.lineWidth = 1 - distance / maxDistance;
+                    ctx.stroke();
                 }
             }
         }
@@ -88,5 +95,10 @@ export class ParticleSystem {
         this.drawParticles();
 
         requestAnimationFrame(() => this.animationLoop());
+    }
+
+    updateCanvasSize(width, height) {
+        this.canvas.width = width;
+        this.canvas.height = height;
     }
 }

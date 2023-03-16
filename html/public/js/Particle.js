@@ -16,6 +16,12 @@ export class Particle {
 
     }
 
+    distanceTo(otherParticle) {
+        const dx = this.x - otherParticle.x;
+        const dy = this.y - otherParticle.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
