@@ -10,9 +10,9 @@ export class Particle {
         this.vy = Math.random() * 4 - 2;
         this.size = Math.random() * 20 + 10;
         this.connections = [];
-        this.radius = 15;
-        this.speedX = Math.random() * 4 - 2;
-        this.speedY = Math.random() * 4 - 2;
+        this.radius = 25;
+        this.speedX = Math.random() * 1.1 - 1;
+        this.speedY = Math.random() * 2.8 - 1;
 
     }
 

@@ -1,7 +1,7 @@
 import { Particle } from './Particle.js';
 
 export class ParticleSystem {
-    constructor(canvasElement, particleImage, particleCount = 100) {
+    constructor(canvasElement, particleImage, particleCount = 60) {
         this.canvas = canvasElement;
         this.ctx = this.canvas.getContext('2d');
         if (!this.ctx) {
@@ -34,13 +34,14 @@ export class ParticleSystem {
     createConnections() {
         const maxDistance = 150;
         const ctx = this.ctx;
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
 
         for (let i = 0; i < this.particles.length; i++) {
             for (let j = i + 1; j < this.particles.length; j++) {
                 const particle1 = this.particles[i];
                 const particle2 = this.particles[j];
                 const distance = particle1.distanceTo(particle2);
+
 
                 if (distance <= maxDistance) {
                     ctx.beginPath();

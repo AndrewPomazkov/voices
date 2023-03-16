@@ -18,7 +18,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 // Создание экземпляра системы частиц
-const particleSystem = new ParticleSystem(canvas, particleImage, 100);
+const particleSystem = new ParticleSystem(canvas, particleImage, 60);
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
