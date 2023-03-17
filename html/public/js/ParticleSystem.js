@@ -11,30 +11,51 @@ export class ParticleSystem {
         this.particleImage = particleImage;
         this.particleCount = particleCount;
         this.particles = [];
+        this.mouseX = 0;
+        this.mouseY = 0;
 
-        for (let i = 0; i < this.particleCount; i++) {
-            const particle = new Particle(this.ctx, this.particleImage, this.canvas.width, this.canvas.height);
+        const jsonObject = JSON.parse(dataJson);
+
+        jsonObject.forEach(item => {
+            const particle = new Particle(
+                this.ctx,
+                this.particleImage,
+                this.canvas.width,
+                this.canvas.height,
+
+                item.user.name,
+                item.path,
+                item.filename,
+                item.created_at,
+                item.updated_at,
+                item.id,
+                item.user.id,
+                item.user.avatar
+
+            );
+
+            particle.setBorder();
+
             this.particles.push(particle);
-        }
-    }
-
-    update() {
-        this.particles.forEach((particle) => {
-            particle.update();
         });
-
-        // Проверка столкновений между частицами и обработка их
-        for (let i = 0; i < this.particles.length - 1; i++) {
-            for (let j = i + 1; j < this.particles.length; j++) {
-                this.particles[i].checkCollision(this.particles[j]);
+        if(this.particleCount > 0){
+            for (let i = 0; i < this.particleCount; i++) {
+                const particle = new Particle(
+                    this.ctx,
+                    this.particleImage,
+                    this.canvas.width,
+                    this.canvas.height,
+                );
+                this.particles.push(particle);
             }
         }
+
     }
 
     createConnections() {
         const maxDistance = 150;
         const ctx = this.ctx;
-        ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+        ctx.strokeStyle = 'rgba(12,56,93,0.85)';
 
         for (let i = 0; i < this.particles.length; i++) {
             for (let j = i + 1; j < this.particles.length; j++) {
@@ -55,9 +76,9 @@ export class ParticleSystem {
         }
     }
 
-    updateParticles() {
+    updateParticles(mouseX, mouseY) {
         for (let particle of this.particles) {
-            particle.update();
+            particle.update(mouseX, mouseY);
         }
     }
 
@@ -80,17 +101,17 @@ export class ParticleSystem {
         this.canvasContext.strokeStyle = "rgba(194,18,18,0.85)";
 
         for (let connection of this.connections) {
-            this.canvasContext.moveTo(connection.source.x, connection.source.y);
-            this.canvasContext.lineTo(connection.target.x, connection.target.y);
+            this.ctx.moveTo(connection.source.x, connection.source.y);
+            this.ctx.lineTo(connection.target.x, connection.target.y);
         }
 
         this.canvasContext.stroke();
     }
 
     animationLoop() {
-        this.canvasContext.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+        this.ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 
-        this.updateParticles();
+        this.updateParticles(this.mouseX, this.mouseY);
         this.checkCollisions();
         this.drawConnections();
         this.drawParticles();
@@ -101,5 +122,17 @@ export class ParticleSystem {
     updateCanvasSize(width, height) {
         this.canvas.width = width;
         this.canvas.height = height;
+    }
+
+    getClickedParticle(x, y) {
+        for (let i = 0; i < this.particles.length; i++) {
+            const particle = this.particles[i];
+            const distance = particle.distanceTo({ x, y });
+
+            if (distance <= particle.scaledSize / 2) {
+                return i;
+            }
+        }
+        return null;
     }
 }

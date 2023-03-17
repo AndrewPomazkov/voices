@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Str;
+use Laravolt\Avatar\Avatar;
 
 class AuthController extends Controller
 {
@@ -17,10 +19,16 @@ class AuthController extends Controller
             'password' => 'required|string|confirmed'
         ]);
 
+        $avatar = new Avatar();
+        $timestamp = md5(time() . Str::random());
+        $avatarPath = "avatars/{$timestamp}.png";
+        $avatar->create($timestamp)->save(public_path($avatarPath));
+
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'avatar_path' => $avatarPath
         ]);
 
         $user->save();

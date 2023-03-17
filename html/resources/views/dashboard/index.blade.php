@@ -13,6 +13,9 @@
             display: block;
         }
     </style>
+    <script>
+        var dataJson ='<?=$audios->toJson()?>';
+    </script>
     <canvas id="particleCanvas" width="800" height="600"></canvas>
 
     <script type="module" src="/js/main.js"></script>

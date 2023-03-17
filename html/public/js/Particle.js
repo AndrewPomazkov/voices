@@ -1,19 +1,55 @@
 export class Particle {
-    constructor(ctx, particleImage, canvasWidth, canvasHeight) {
+    constructor(
+            ctx,
+            particleImage,
+            canvasWidth,
+            canvasHeight,
+
+
+            user_name,
+            item_path,
+            item_filename,
+            item_created_at,
+            item_updated_at,
+            item_id,
+            item_user_id
+    ) {
         this.ctx = ctx;
-        this.particleImage = particleImage;
+        this.postImage = this.particleImage = particleImage;
+
+        this.user_name = user_name;
+        this.audioUri = this.item_path=item_path;
+        this.item_filename=item_filename;
+        this.item_created_at=item_created_at;
+        this.item_updated_at=item_updated_at;
+        this.item_id=item_id;
+        this.userId = this.item_user_id=item_user_id;
+
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.x = Math.random() * this.canvasWidth;
         this.y = Math.random() * this.canvasHeight;
         this.vx = Math.random() * 4 - 2;
         this.vy = Math.random() * 4 - 2;
-        this.size = Math.random() * 20 + 10;
         this.connections = [];
         this.radius = 25;
-        this.speedX = Math.random() * 1.1 - 1;
-        this.speedY = Math.random() * 2.8 - 1;
+        this.speedX =Math.random() * (0.50 - 0.15) + 0.15;
+        this.speedY = Math.random() * (0.50 - 0.15) + 0.15;
+        this.z = Math.random() * this.canvasWidth;
+        this.zSpeed = Math.random() * 0.9 - 0.45;
+        this.scaledSize = this.size * (1 - this.z / this.canvasWidth);
+        this.alpha = 1 - this.z / this.canvasWidth;
+        this.zFactor = 1 - this.z / this.canvasWidth;
 
+        const minSize = 20; // Задайте желаемый минимальный размер
+        const maxSize = 60; // Задайте желаемый максимальный размер
+        this.size = Math.random() * (maxSize - minSize) + minSize;
+        this.alpha = (((maxSize - this.size) / (maxSize - minSize)) * 0.50) + 0.25;
+        this.lastMouseX = null;
+        this.lastMouseY = null;
+        this.lastMouseMoveTime = null
+
+        this.addBorder = false;
     }
 
     distanceTo(otherParticle) {
@@ -22,9 +58,48 @@ export class Particle {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    update() {
+    setBorder() {
+        this.addBorder = true;
+        return this;
+    }
+
+    update(mouseX, mouseY) {
+        const currentTime = Date.now();
+
+        if (mouseX !== this.lastMouseX || mouseY !== this.lastMouseY) {
+            this.lastMouseMoveTime = currentTime;
+        }
+
+        this.lastMouseX = mouseX;
+        this.lastMouseY = mouseY;
+
+        const isCursorStopped = currentTime - this.lastMouseMoveTime > 100; // 100ms - время задержки перед считыванием остановки курсора
+
+        const distanceToMouse = Math.sqrt(Math.pow(this.x - mouseX, 2) + Math.pow(this.y - mouseY, 2));
+
+        if (isCursorStopped && distanceToMouse < 200) {
+            const attractionStrength = 0.02; // Значение, определяющее силу притяжения частицы к курсору
+
+            this.vx += (mouseX - this.x) * attractionStrength;
+            this.vy += (mouseY - this.y) * attractionStrength;
+        }
+        if (distanceToMouse < 200 && this.alpha > 0.4) {
+            return;
+        }
+        const zAdjustedSpeedX = this.speedX * (1 - this.z * this.zFactor / this.canvasWidth);
+        const zAdjustedSpeedY = this.speedY * (1 - this.z * this.zFactor / this.canvasWidth);
+
+        this.x += zAdjustedSpeedX;
+        this.y += zAdjustedSpeedY;
+        this.z = (this.z + this.zSpeed + this.canvasWidth) % this.canvasWidth;
+
         this.x += this.speedX;
         this.y += this.speedY;
+        this.z = (this.z + this.zSpeed + this.canvasWidth) % this.canvasWidth;
+
+        if (this.z < 0 || this.z > this.canvasWidth) {
+            this.zSpeed = -this.zSpeed;
+        }
 
         if (this.x - this.radius < 0 || this.x + this.radius > window.innerWidth) {
             this.speedX = -this.speedX;
@@ -33,6 +108,14 @@ export class Particle {
         if (this.y - this.radius < 0 || this.y + this.radius > window.innerHeight) {
             this.speedY = -this.speedY;
         }
+
+        this.scaledSize = this.size * (1 - this.z / this.canvasWidth);
+        this.alpha = 1 - this.z / this.canvasWidth;
+
+        this.scaledSize = this.size * (1 - this.z / this.canvasWidth);
+        this.alpha = Math.max(0.25, 1 - this.z / this.canvasWidth);
+
+
     }
 
     checkCollision(otherParticle) {
@@ -72,12 +155,34 @@ export class Particle {
     }
 
     draw(context, particleImage) {
+        const scaleFactor = this.z / this.canvasWidth;
+        const scaledSize = this.size * scaleFactor;
+
+        context.save();
+        context.globalAlpha = this.alpha;
+
+        // Создаем круглый клип-путь
+        context.beginPath();
+        context.arc(this.x, this.y, scaledSize / 2, 0, 2 * Math.PI, false);
+        context.closePath();
+        context.clip();
+
+        if (this.addBorder) {
+            this.ctx.strokeStyle = 'black'; // Цвет рамки (можете изменить на другой)
+            this.ctx.lineWidth = 1; // Толщина рамки (можете изменить на другое значение)
+            this.ctx.stroke();
+        }
+
+        // Рисуем изображение внутри круглого клип-пути
         context.drawImage(
             particleImage,
-            this.x - this.radius,
-            this.y - this.radius,
-            this.radius * 2,
-            this.radius * 2
+            this.x - scaledSize / 2,
+            this.y - scaledSize / 2,
+            scaledSize,
+            scaledSize
         );
+
+        context.restore();
     }
+
 }

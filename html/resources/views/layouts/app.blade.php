@@ -15,6 +15,28 @@
         <style>
             body {
                 font-family: 'Nunito', sans-serif;
+                position: relative;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+            }
+            .auth-container {
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 100%;
+                min-width: 300px;
+                max-width: 25%;
+                background-color: #a8d5e2;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 10px;
+            }
+            .auth-container a.btn {
+                text-align: center;
+                width: 100%;
             }
         </style>
     </head>
@@ -25,11 +47,13 @@
                     @auth
                         <a href="{{ url('/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
                     @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+                        <div class="auth-container">
+                            <a href="{{ route('login') }}" class="btn btn-primary text-sm mb-2">Log in</a>
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                        @endif
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="btn btn-secondary text-sm">Register</a>
+                            @endif
+                        </div>
                     @endauth
                 </div>
             @endif

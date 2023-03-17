@@ -8,15 +8,36 @@ RUN apt-get update && apt-get install -y git \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    libjpeg62-turbo-dev \
     unzip \
-    && docker-php-ext-install intl pdo_mysql zip opcache gd
+    imagemagick \
+    libmagickwand-dev \
+    && docker-php-ext-install intl pdo_mysql zip opcache gd && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install -j$(nproc) gd
 
 RUN pecl install xdebug-3.1.1 && docker-php-ext-enable xdebug
 
+RUN pecl install imagick && docker-php-ext-enable imagick
+
+RUN apt-get install nano
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y cron \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN a2enmod rewrite
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-RUN apt-get install nano
+RUN echo "* * * * * cd /var/www/html && php artisan schedule:run >> /dev/null 2>&1" > /etc/cron.d/cron-laravel-schedule
+
+RUN chmod 0644 /etc/cron.d/cron-laravel-schedule \
+    && crontab /etc/cron.d/cron-laravel-schedule
+
+CMD service cron start && apache2-foreground

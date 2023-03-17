@@ -18,9 +18,7 @@ use App\Http\Controllers\AudioController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DashboardController::class, 'index']);
 
 
 Route::get('/login', function () {

@@ -111,9 +111,21 @@
       <path value="$PROJECT_DIR$/html/vendor/sebastian/object-enumerator" />
       <path value="$PROJECT_DIR$/html/vendor/sebastian/resource-operations" />
       <path value="$PROJECT_DIR$/html/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/html/vendor/intervention/image" />
+      <path value="$PROJECT_DIR$/html/vendor/laravolt/avatar" />
+      <path value="$PROJECT_DIR$/html/vendor/doctrine/deprecations" />
+      <path value="$PROJECT_DIR$/html/vendor/doctrine/cache" />
+      <path value="$PROJECT_DIR$/html/vendor/doctrine/event-manager" />
+      <path value="$PROJECT_DIR$/html/vendor/doctrine/dbal" />
+      <path value="$PROJECT_DIR$/html/vendor/phpstan/phpdoc-parser" />
+      <path value="$PROJECT_DIR$/html/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/html/vendor/phpdocumentor/type-resolver" />
+      <path value="$PROJECT_DIR$/html/vendor/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/html/vendor/barryvdh/reflection-docblock" />
+      <path value="$PROJECT_DIR$/html/vendor/barryvdh/laravel-ide-helper" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings custom_loader_path="$PROJECT_DIR$/html/vendor/autoload.php" />
