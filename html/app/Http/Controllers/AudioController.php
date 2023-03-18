@@ -56,4 +56,9 @@ class AudioController extends Controller
     {
         return view('audio.upload');
     }
+
+    public function applyEffect(Request $request, $id)
+    {
+        // Здесь будет код для применения аудиофильтров
+    }
 }

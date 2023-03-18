@@ -20,7 +20,6 @@ use App\Http\Controllers\AudioController;
 
 Route::get('/', [DashboardController::class, 'index']);
 
-
 Route::get('/login', function () {
     return view('auth.loginForm');
 })->name('login');
@@ -34,12 +33,13 @@ Route::post('register', [RegistrationControllerAlias::class, 'store']);
 Route::get('home', [DashboardController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
+    Route::post('audio/{id}/apply-effect', [AudioController::class, 'applyEffect'])->name('audio.apply_effect');
+
     Route::get('audio/upload', [AudioController::class, 'showUploadForm'])->name('audio.upload');
     Route::post('audio/upload', [AudioController::class, 'store'])->name('audio.store');
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard_index');
     Route::get('dashboard/audio/{id}/delete', [ModeratorController::class, 'deleteAudio'])->name('dashboard_delete_audio');
-
 
     Route::get('moderator', [ModeratorController::class, 'index'])->name('moderator.index');
     Route::post('moderator/audio', [ModeratorController::class, 'storeAudio'])->name('moderator.store.audio');
