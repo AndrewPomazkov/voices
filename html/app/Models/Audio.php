@@ -19,4 +19,9 @@ class Audio extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function audioEffects()
+    {
+        return $this->hasMany(AudioEffect::class);
+    }
 }

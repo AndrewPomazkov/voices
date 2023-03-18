@@ -12,11 +12,20 @@
         canvas {
             display: block;
         }
+
+        #particleCanvas,#canvas-container {
+            width: 90%;
+            position: absolute;
+            left:10%;
+            top: 0;
+        }
     </style>
     <script>
         var dataJson ='<?=$audios->toJson()?>';
     </script>
-    <canvas id="particleCanvas" width="800" height="600"></canvas>
+    <div id="canvas-container" class="w-full h-full">
+        <canvas id="particleCanvas"></canvas>
+    </div>
 
     <script type="module" src="/js/main.js"></script>
 @endsection

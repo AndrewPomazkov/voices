@@ -1,5 +1,17 @@
 FROM php:8.1-apache
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    apt-transport-https \
+    ca-certificates \
+    gnupg
+
+
+RUN echo "deb http://deb.debian.org/debian buster main contrib non-free" > /etc/apt/sources.list.d/debian.list && \
+    apt-get update && \
+    apt-get install -y sox
+
+
 RUN apt-get update && apt-get install -y git \
     libicu-dev \
     libzip-dev \
@@ -27,8 +39,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN apt-get update && apt-get install -y cron \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod rewrite
-
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
@@ -39,5 +49,7 @@ RUN echo "* * * * * cd /var/www/html && php artisan schedule:run >> /dev/null 2>
 
 RUN chmod 0644 /etc/cron.d/cron-laravel-schedule \
     && crontab /etc/cron.d/cron-laravel-schedule
+
+RUN chown -R www-data:www-data /var/www/html && a2enmod rewrite
 
 CMD service cron start && apache2-foreground

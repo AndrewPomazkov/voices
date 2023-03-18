@@ -27,25 +27,44 @@
                 height: 100%;
                 min-width: 300px;
                 max-width: 25%;
-                background-color: #a8d5e2;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 padding: 10px;
+                background-image: linear-gradient(to right,  rgba(168, 213, 226, 0.7) 100%, rgba(168, 213, 226, 0.7) 40%, rgba(168, 213, 226, 0.7) 0%);
+
             }
             .auth-container a.btn {
                 text-align: center;
                 width: 100%;
+            }
+            .bg-light-blue-200 {
+                width: 15%;
+                position: fixed;
+                top: 0px;
+                min-height: 100vh;
+                background-color: #a8d5e2;
+                background-image: linear-gradient(to right,  rgba(168, 213, 226, 0.7) 100%, rgba(168, 213, 226, 0.7) 40%, rgba(168, 213, 226, 0.7) 0%);
+
+            }
+            #canvas-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 15%;
+                bottom: 0;
+                overflow: hidden;
             }
         </style>
     </head>
     <body class="antialiased" >
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                <div class="fixed top-0 right-0 w-15 h-screen bg-light-blue-200 px-6 py-4">
                     @auth
                         <a href="{{ url('/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
+                        <a href="{{ url('/audio/upload') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Upload audio</a>
                     @else
                         <div class="auth-container">
                             <a href="{{ route('login') }}" class="btn btn-primary text-sm mb-2">Log in</a>
