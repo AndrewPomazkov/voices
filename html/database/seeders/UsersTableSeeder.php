@@ -44,7 +44,7 @@ class UsersTableSeeder extends Seeder
             echo 'Yes we do!'.PHP_EOL;
             DB::table('users')->insert([
                 'name' => 'censore',
-                'email' => 'pomazkova@gmail.com',
+                'email' => 'censore@gmail.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('xlsqbq'), // Set a default password for all generated users
                 'remember_token' => Str::random(10),

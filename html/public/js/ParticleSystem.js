@@ -13,10 +13,11 @@ export class ParticleSystem {
         this.particles = [];
         this.mouseX = 0;
         this.mouseY = 0;
-
+        this.stopAnimateParticleId = false;
         const jsonObject = JSON.parse(dataJson);
 
         jsonObject.forEach(item => {
+
             const particle = new Particle(
                 this.ctx,
                 this.particleImage,
@@ -129,7 +130,9 @@ export class ParticleSystem {
             const particle = this.particles[i];
             const distance = particle.distanceTo({ x, y });
 
-            if (distance <= particle.scaledSize / 2) {
+            if (distance <= particle.scaledSize) {
+                this.stopAnimateParticleId = i;
+
                 return i;
             }
         }

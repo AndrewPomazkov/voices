@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('audio_effects', function (Blueprint $table) {
+        Schema::create('effects', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('audio_id');
-            $table->string('effect_type');
-            $table->text('effect_parameters')->nullable();
+            $table->string('effect_title', 255);
+            $table->string('effect_description', 500);
+            $table->string('effect_name')->nullable();
+            $table->json('effect_parameters');
             $table->timestamps();
-
-            $table->foreign('audio_id')->references('id')->on('audio')->onDelete('cascade');
         });
     }
 
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audio_effects');
+        Schema::dropIfExists('effects');
     }
 };

@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use Database\Seeders\EffectsSeeder;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class EffectsSeederCommand extends Command
 {
@@ -11,14 +13,14 @@ class EffectsSeederCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'seed:effects';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Populate the effects table';
 
     /**
      * Execute the console command.
@@ -27,6 +29,11 @@ class EffectsSeederCommand extends Command
      */
     public function handle(): int
     {
-        return Command::SUCCESS;
+
+        $seeder = app()->make(EffectsSeeder::class);
+        $seeder->run();
+
+        $this->info('Effects table populated successfully');
+        return CommandAlias::SUCCESS;
     }
 }

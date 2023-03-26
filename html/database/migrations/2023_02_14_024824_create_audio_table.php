@@ -17,6 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('path', 255);
             $table->string('filename', 255);
+            $table->integer('likes')->default(0);
+            $table->integer('dislikes')->default(0);
+            $table->integer('listens')->default(0);
             $table->timestamps();
 
             $table->foreignId('user_id')->constrained('users');

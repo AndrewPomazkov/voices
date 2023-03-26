@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Laravel</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <!-- Fonts -->
@@ -43,6 +43,7 @@
                 width: 15%;
                 position: fixed;
                 top: 0px;
+                right: 0px;
                 min-height: 100vh;
                 background-color: #a8d5e2;
                 background-image: linear-gradient(to right,  rgba(168, 213, 226, 0.7) 100%, rgba(168, 213, 226, 0.7) 40%, rgba(168, 213, 226, 0.7) 0%);
@@ -61,7 +62,7 @@
     <body class="antialiased" >
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
-                <div class="fixed top-0 right-0 w-15 h-screen bg-light-blue-200 px-6 py-4">
+                <div class="fixed top-0 left-0 w-15 h-screen bg-light-blue-200 px-6 py-4">
                     @auth
                         <a href="{{ url('/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
                         <a href="{{ url('/audio/upload') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Upload audio</a>

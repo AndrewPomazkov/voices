@@ -6,7 +6,7 @@ use App\Models\Audio;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Audio>
+ * @extends Factory
  */
 class AudioFactory extends Factory
 {

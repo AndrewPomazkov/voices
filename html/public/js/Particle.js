@@ -50,6 +50,13 @@ export class Particle {
         this.lastMouseMoveTime = null
 
         this.addBorder = false;
+
+        this.fixed = false;
+    }
+    setFixedPosition(x, y) {
+        this.x = x;
+        this.y = y;
+        this.fixed = true;
     }
 
     distanceTo(otherParticle) {
@@ -64,6 +71,7 @@ export class Particle {
     }
 
     update(mouseX, mouseY) {
+        //if(this.fixed === true) return;
         const currentTime = Date.now();
 
         if (mouseX !== this.lastMouseX || mouseY !== this.lastMouseY) {
@@ -83,7 +91,7 @@ export class Particle {
             this.vx += (mouseX - this.x) * attractionStrength;
             this.vy += (mouseY - this.y) * attractionStrength;
         }
-        if (distanceToMouse < 200 && this.alpha > 0.4) {
+        if (distanceToMouse < 200 && this.alpha > 0.1) {
             return;
         }
         const zAdjustedSpeedX = this.speedX * (1 - this.z * this.zFactor / this.canvasWidth);
@@ -91,10 +99,8 @@ export class Particle {
 
         this.x += zAdjustedSpeedX;
         this.y += zAdjustedSpeedY;
-        this.z = (this.z + this.zSpeed + this.canvasWidth) % this.canvasWidth;
+        this.z = (this.z + this.zSpeed + this.canvasWidth) % this.canvasWidth ;
 
-        this.x += this.speedX;
-        this.y += this.speedY;
         this.z = (this.z + this.zSpeed + this.canvasWidth) % this.canvasWidth;
 
         if (this.z < 0 || this.z > this.canvasWidth) {
@@ -110,11 +116,7 @@ export class Particle {
         }
 
         this.scaledSize = this.size * (1 - this.z / this.canvasWidth);
-        this.alpha = 1 - this.z / this.canvasWidth;
-
-        this.scaledSize = this.size * (1 - this.z / this.canvasWidth);
-        this.alpha = Math.max(0.25, 1 - this.z / this.canvasWidth);
-
+        this.alpha = 1 - (this.z / this.canvasWidth) ;
 
     }
 
@@ -163,13 +165,13 @@ export class Particle {
 
         // Создаем круглый клип-путь
         context.beginPath();
-        context.arc(this.x, this.y, scaledSize / 2, 0, 2 * Math.PI, false);
+        context.arc(this.x, this.y, scaledSize * 2, 0, 2 * Math.PI, false);
         context.closePath();
         context.clip();
 
         if (this.addBorder) {
             this.ctx.strokeStyle = 'black'; // Цвет рамки (можете изменить на другой)
-            this.ctx.lineWidth = 1; // Толщина рамки (можете изменить на другое значение)
+            this.ctx.lineWidth = 0; // Толщина рамки (можете изменить на другое значение)
             this.ctx.stroke();
         }
 
@@ -178,8 +180,8 @@ export class Particle {
             particleImage,
             this.x - scaledSize / 2,
             this.y - scaledSize / 2,
-            scaledSize,
-            scaledSize
+            scaledSize * 4,
+            scaledSize * 4
         );
 
         context.restore();

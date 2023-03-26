@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AudioEffectList;
+use App\Models\Effect;
 use App\Rules\{
     BitcrusherRule,
     ChorusRule,
@@ -30,17 +30,9 @@ use App\Rules\{
 };
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
-class AudioEffectController extends Controller
+class AudioEffectsController extends Controller
 {
-    public function store(Request $request)
-    {
-
-    }
-
-
-
     public function storeVad(Request $request)
     {
         $request->validate([
@@ -248,10 +240,10 @@ class AudioEffectController extends Controller
         // Ваш код для обработки запроса
     }
 
-    public function getList()
+    public function list()
     {
         return response()->json([
-            'effects' => AudioEffectList::all()
+            'effects' => Effect::all()
         ], 200);
     }
 }

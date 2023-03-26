@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -77,13 +78,13 @@ class User extends Authenticatable
      */
     public function setPasswordAttribute($password)
     {
-        $this->attributes['password'] = bcrypt($password);
+        $this->attributes['password'] = Hash::make($password);
     }
 
     public function getPasswordAttribute()
     {
         // We just need to check if we have unhashed password inside the DB
         // And if it is unhashed then hash it
-        return strlen($this->attributes['password']) < self::UNHASHED_PASSWORD_LEN ? bcrypt($this->attributes['password']) : $this->attributes['password'];
+        return strlen($this->attributes['password']) < self::UNHASHED_PASSWORD_LEN ? Hash::make($this->attributes['password']) : $this->attributes['password'];
     }
 }

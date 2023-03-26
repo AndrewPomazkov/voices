@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             AudioSeeder::class,
+            UsersTableSeeder::class,
+            EffectsSeeder::class,
         ]);
     }
 }

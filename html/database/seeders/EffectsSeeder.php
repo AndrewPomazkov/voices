@@ -2,12 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\AudioEffectList;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Effect;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class EffectsSeeder extends Seeder
 {
@@ -524,7 +520,7 @@ class EffectsSeeder extends Seeder
         ];
 
         foreach ($effectList as $effect) {
-            AudioEffectList::create([
+            Effect::create([
                 'effect_name' => $effect['effect_name'],
                 'effect_title' => $effect['effect_title'],
                 'effect_description' => $effect['effect_description'],
